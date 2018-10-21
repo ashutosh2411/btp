@@ -197,8 +197,7 @@ s _ (Pad x) _ = x
 p :: HashF -> HShape -> BStr -> BStr
 -- Parallel Hash Function
 p h (InnerHash aShape) bStr = h $ p h aShape  bStr
-p h (Concat l) bStr = 
-  concat $ parMap rpar (\x -> p h x bStr) l
+p h (Concat l) bStr = concat $ parMap rpar (\x -> p h x bStr) l
 p _ (Slice from to) bStr = my_slice from to bStr
 p _ (Pad x) _ = x
 ```
