@@ -22,7 +22,8 @@ class Hashable a where
 	type Node a
 	hash :: Node a -> ID a
 	toSakura :: a -> HShape
-	fromSakura :: HShape -> a
 
-instance Hash [a] where
+instance Hashable [a] where
 	hash = 
+	toSakura [] = InnerHash "Nil"
+	toSakura x:xs = InnerHash $ Concat [InnerHash "Cons", InnerHash $ show x, InnerHash ]
