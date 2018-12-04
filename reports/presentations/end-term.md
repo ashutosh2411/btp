@@ -1,7 +1,8 @@
 <!-- $theme: default -->
 
-# B Tech Project
-_Ashutosh Bharat Upadhye_     
+# Hashing Algebraic Datatypes
+## B Tech Project
+**Ashutosh Bharat Upadhye**
 Supervisor: Dr. Piyush P Kurur   
 
 ---------------------
@@ -436,7 +437,7 @@ HMap a = case (typeRep a) of
 
 ---------------------
 
-# Future works:
+# Future works _(next semester)_:
 
 * Deduce a standard method for mapping Algebraic Datatypes to Sakura tree.
 * Check for feasibility. _Concerned because the small implementation I've shown wasn't very pretty_.
