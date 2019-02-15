@@ -24,7 +24,7 @@ data HShape =
     |Slice Int Int
     |Pad BStr deriving Show
 
-    my_slice :: Int -> Int -> BStr -> BStr
+my_slice :: Int -> Int -> BStr -> BStr
 my_slice from to = (drop from).(take to)
 
 s :: HashF -> HShape -> BStr -> BStr
