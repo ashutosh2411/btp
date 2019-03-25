@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+z{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
@@ -7,7 +7,9 @@
 
 import GHC.Generics
 
-data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Generic, Show)
+data Tree a = EmptyTree 
+    | Node a (Tree a) (Tree a) 
+    deriving (Generic, Show)
 
 instance (Hashable a, Show a) => Hashable (Tree a)  
 
@@ -16,7 +18,8 @@ data HShape =
     |Concat [HShape]
     |Interleaving [HShape]
     |Slice Int Int
-    |Pad String deriving Show
+    |Pad String 
+    deriving Show
 
 class Hashable a where
     toHShape :: a -> HShape

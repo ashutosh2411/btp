@@ -5,6 +5,69 @@
 _Ashutosh Bharat Upadhye_     
 Supervisor: Dr. Piyush P Kurur   
 
+------
+# What is Generic Programming?
+
+the adjective "generic" is heavily overloaded!
+* Java / C# generics
+* C++ templates
+* Ada generic packages
+
+-------
+# What is Generic Programming?
+> The goal is often the same.
+> `A higher level of abstraction than "normally" available.`
+
+> The technique is also often the same. 
+> `Some form of parametrization and instantiations.`
+
+----
+# Examples of Generic Programming
+Java / C#
+```
+public class Stack<T>
+{
+    public void push (T item) {..}
+    public T pop () {..}
+}
+```
+---
+# Examples of Generic Programming
+C++
+```cpp
+template <typename T, typename Compare>
+T & min (T&a, T&b, Compare comp) {
+    if (comp (b, a))
+        return b;
+    return a;
+}
+```
+
+---
+# Generic Programming
+
+It is apparant that:
+* Java-stype generics ~ parametric polymorphism 
+* C++ templates ~ ad-hoc polymorphism
+
+In Haskell:
+* Both forms of polymorphism already exist. 
+* We don't call them generics because they are sort of native to the language. 
+
+---
+# Can there be a yet higher level of abstraction? 
+
+---
+# YES! 
+
+---
+# Generic Programming: Haskell.
+
+Datatype-generic Programming:
+* Abstract over the structure of the datatype. 
+* Also known as "polytypism" and "shape / structure polymorphism". 
+
+
 ---------------------
 
 # Algebraic DataTypes and Generics
@@ -25,6 +88,11 @@ Non-syntactic features
 -------------
 
 # Structure of Datatypes: Sums
+
+-------------
+
+# Structure of Datatypes: Sums
+
 ```haskell
 data AltEx = A1 Int | A2 Char
 ```
@@ -59,6 +127,9 @@ b3 :: Float -> AltEx2
 b3 = R . R
 ```
 
+---------------------
+
+# Structure of Datatypes: Products
 ---------------------
 
 # Structure of Datatypes: Products
@@ -97,6 +168,9 @@ fldEx2' x y z = x :*: (y :*: x)
 ---------------------
 
 # Structure of Datatypes: Sums of Products
+---------------------
+
+# Structure of Datatypes: Sums of Products
 To "sum" it all up, recall the first example. 
 ```haskell
 data D p = Alt1 | Alt2 Int p
@@ -111,21 +185,27 @@ Notes:
 
 ---------------------
 
+# Proof?
+---------------------
+
 # Structure of Datatypes: Isomorphism
 How do we know that RepD accurately models D? 
 
 We define an Isomorphism as follows.
 ```haskell
-fromD :: D p → RepD p
+fromD :: D p -> RepD p
 fromD Alt1 = LU
-fromD (Alt2 i p) = R (i :×: p)
-toD :: RepD p → D p
+fromD (Alt2 i p) = R (i :*: p)
+toD :: RepD p D p
 toD (L U) = Alt1
-toD (R (i :×: p)) = Alt2 i p
+toD (R (i :*: p)) = Alt2 i p
 ```
 This allows us to convert between the familiar datatype and the *structural representation* used for generic operations. 
 
 ---------------------
+# Something missing?
+
+---
 
 # Structure of Datatypes: Constructors
 The representation lacked any information about the constructors (e.g. the names). 
@@ -193,11 +273,20 @@ Some observations:
 * Predictable pattern.
 * Recursive functions, but argument types differ.
 
----------------------
+---
+###### Recursive, but differing arguments..
+##### Recursive, but differing arguments..
+#### Recursive, but differing arguments..
+### Recursive, but differing arguments..
+## Recursive, but differing arguments..
+# Recursive, but differing arguments..
+
+
+------------------
 
 # Generic Functions, Generically
 Let's explore "true" genericity, where the structure is a parameter instead of a pattern. 
-* **Polymorphic Recursion** - functions with common scheme that reference each other and allows types to change in the calls. 
+* **Polymorphic Recursion** - functions with comon scheme that reference each other and allows types to change in the calls. 
 ```haskell
 showU :: U -> String
 showC :: (.) => C a -> String
@@ -247,12 +336,26 @@ instance Show a => Show (C a) where
 Binary product:
 ```haskell
 instance (Show a, Show b) => Show (a :*: b) where
-  sshow = showP show show
+  show = showP show show
 ```
 Binary sum:
 ```haskell
 instance (Show a, Show b) => Show (a :+: b) where
-  sshow = showS show show
+  show = showS show show
+```
+
+---------------------
+
+# Polymorphic Recursion
+Recall `showRepD`:
+```haskell
+showRepD :: (p -> String) -> RepD p -> String
+showRepD sP = showS (showC showU) (showC (showP sInt sP))
+```
+Compare to new version that's possible. 
+```haskell
+
+
 ```
 
 ---------------------
@@ -314,7 +417,7 @@ The instance for `D` is:
 ```haskell
 instance Generic (D p) where
   type Rep (D p) = RepD p
-  from = from D
+  from = fromD
   to = toD
 ```
 
@@ -329,16 +432,9 @@ gshow = show . from
 
 ---------------------
 
-# Generic Programming in general
-* Datatype-generic programming
-	* Datatype is a parameter.
-	* Instantiation gives you a large class of generic functions. 
-* Many generic functions:
-	* Pretty printing (`show`) and parsing (`read`). 
-	* Compression, serialisation and reverse. 
-	* comparision, equality.
-	* Folds, unfolds, maps, zips, zippers.
-	* Traversal, update, query. 
+# Hashing*
+
+#### _* Cryptographic_
 
 ---------------------
 
@@ -484,3 +580,15 @@ instance Hashable a => Hashable [a] where
     Node [a] = Nil
              | (ID a) : (ID [a])
 ```
+
+---
+# A Novel Idea
+```haskell
+class Hashable a where
+    toHShape :: a -> HShape
+    default toHShape :: (Generic a, GHashable (Rep a)) =>a -> HShape
+    toHShape = gtoHShape . from
+```
+
+---
+# Let's explore the code.
