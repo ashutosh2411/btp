@@ -567,3 +567,4 @@ showRepD :: (p -> String) -> RepD p -> String
 showRepD sP = showS (showC showU) (showC (showP sInt sP))
 ```
 The representation has a fairly predictable pattern. The above functions are sort of recursive, but with differing arguments. 
+
