@@ -76,7 +76,7 @@ chunker n size innerpad rootpad =
         InnerHash (Concat (all_ranges ++ [(Pad rootpad)]))
         -- In the end, pad it with rootpad
 
-        c2w8 :: String -> [Word8]
+c2w8 :: String -> [Word8]
 c2w8 = CodStr.encode
 
 

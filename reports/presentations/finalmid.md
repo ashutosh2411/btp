@@ -451,7 +451,7 @@ $$h : \{0,1\}^* \rightarrow \{0,1\}^n$$
 > Pour the **initial value** in a big cauldron and place it over a nice fire. Now slowly add salt if needed and stir well. Marinade your input string by **appending some strengthened padding**. Now chop the resulting bit string into nice **small pieces of the same size** and stretch each piece to at least four times its original length. Slowly add each single piece while continually stirring at the speed given by the rotation constants and spicing it up with some addition constants. When the **hash stew** is ready, extract a portion of **at least 128 bits** and present this hash value on a warm plate with some
 garnish.
 > **'Attacks on Hash functions and Applications.'**  
-<!--*footer:'Attacks on Hash functions and Applications' by Marc Stevens, Universiteit Leiden, 2012.-->
+<!--footer:'Attacks on Hash functions and Applications' by Marc Stevens, Universiteit Leiden, 2012. -->
 
 ---------------------
 
