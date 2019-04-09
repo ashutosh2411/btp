@@ -79,7 +79,6 @@ chunker n size innerpad rootpad =
 c2w8 :: String -> [Word8]
 c2w8 = CodStr.encode
 
-
 -- Fixed Block length mode with inner padding and root padding
 a_block_mode x block_size = chunker (length x) block_size (c2w8 i_padding) (c2w8 r_padding)
 
