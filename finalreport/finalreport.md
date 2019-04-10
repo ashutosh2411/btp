@@ -752,48 +752,62 @@ We can achieve similar effective consequence without having to convert the datat
 
 Let's redefine the generic `GHashable` class which contains the function `gcomputeHash` as follows.
 ```haskell
-    class GHashable hashf f where 
-        gcomputeHash :: hashf -> f a -> BStr
+    class GHashable f where 
+        gcomputeHash :: HashF -> f a -> BStr
 ``` 
 Now we would define instances for representative types as follows. 
 * Unit:
 ```haskell
-    instance GHashable hashf U1 where
-        gcomputeHash hash U1 = hashf (toWord8 "U1")
+    instance GHashable U1 where
+        gcomputeHash hashf U1 = hashf (toWord8 "U1")
 ``` 
 * Product: 
 ```haskell
-    instance (GHashable hashf a, GHashable hashf b) => GHashable hashf (a :*: b) where
+    instance (GHashable a, GHashable b) => GHashable (a :*: b) where
         gcomputeHash hashf (a :*: b) = 
-            concat [gcomputeHash hashf a, 
-                    gcomputeHash hashf b, 
-                    toWord8 "Sum1"]
+            concat [toWord8 "Pdt1", 
+                    gcomputeHash hashf a, 
+                    gcomputeHash 
+                    hashf b]
 ```
 * Sum:
 ```haskell
-    instance (GHashable hashf a, GHashable hashf b) => GHashable hashf (a :+: b) where
+    instance (GHashable a, GHashable b) => GHashable (a :+: b) where
         gcomputeHash hashf (L1 x) = 
-            concat [gcomputeHash hashf x, 
-                    toWord8 "Pdt1L1"]
+            concat [toWord8 "Sum1L1", gcomputeHash hashf x]
         gcomputeHash hashf (R1 x) = 
-            concat [gcomputeHash hashf x, 
-                    toWord8 "Pdt1R1"]
+            concat [toWord8 "Sum1R1", gcomputeHash hashf x]
 ```
 * Metadata and values:
 ```haskell
-instance (GHashable a) => GHashable (M1 i c a) where
-    gcomputeHash hashf (M1 x) = concat [gcomputeHash hashf x, toWord8 c]
+    instance (GHashable a) => GHashable (D1 c a) where
+        gcomputeHash hashf (M1 x) = 
+            concat [toWord8 "M1D", 
+                    gcomputeHash hashf x]
 
-instance (Show a) => GHashable (K1 i a) where
-    gcomputeHash hashf (K1 x) =  hashf (show x)
+    instance (GHashable a, Constructor c) => GHashable (C1 c a) where
+        gcomputeHash hashf m1x@(M1 x) = 
+            concat [toWord8 "M1D", 
+                    hashf $ toWord8 $ conName (m1x), 
+                    gcomputeHash hashf x]
+
+    instance (GHashable a) => GHashable (S1 c a) where
+        gcomputeHash hashf (M1 x) = 
+            concat [toWord8 "M1S", 
+                    gcomputeHash hashf x]
+
+    instance (Show a) => GHashable (K1 i a) where
+        gcomputeHash hashf (K1 x) =  
+            concat [toWord8 "K1", 
+                    hashf (toWord8 $ show x)]
 ```
 
 Thus, we can now compute hash of any datatype as follows. 
 ```haskell
-    class Hashable hashf a where
-        computeHash :: hashf -> a -> BStr
-        default computeHash :: (Generic a, GHashable hashf (Rep a)) => hashf-> a -> BStr
-        computeHash = gcomputeHash hashf . from 
+    class Hashable a where
+        computeHash :: HashF -> a -> BStr
+        default computeHash :: (Generic a, GHashable (Rep a)) => HashF -> a -> BStr
+        computeHash hashf x = gcomputeHash hashf (from x) 
 ```
 
 Now, the instance Hashable can be defined without specifically defining the computeHash function. Consider the following datatype. 
@@ -878,3 +892,22 @@ and the `dtMineBlock` function becomes,
 
 Here, the proof of work is not the same as the previous case, but is equally valid. 
 
+\newpage
+
+# 7. Future Works
+The current implementation is serial implementation of Hash. One could work on parallel 
+implementation by first converting the datatype to its string representation, and the Hshapes will have slicing constructors to slice the string precisely to obtain the required subrepresentation of the datatype and then use that HShape to generate hash. 
+
+\newpage
+
+# 8. Rerefences
+
+1. **Sakura: a flexible coding for tree hashing** by *Guido Bertoni, Joan Daemen, Michael Peeters, and Gilles Van Assche*.
+
+2. **GHC Generics Explained** by *Mark Karpov*.
+
+3. **Aeson: the tutorial** by *Artyom Kazak*.
+
+4. **Rolling your Own Blockchain in Haskell** by *Michael Burge*.
+
+5. **Advantages of Functional Programming for Blockchain Protocols** by *aeternity*.
