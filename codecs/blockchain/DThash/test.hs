@@ -8,25 +8,27 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 
-module DThash where
+--module DThash where
 import Data.Data
 import Data.Word
 import qualified Codec.Binary.UTF8.String as CodStr
 import Data.Time.Clock
+--import Crypto.Hash.SHA256
 import Data.Digest.SHA256
+--import Data.Digest.SHA384
 import System.Environment
 import GHC.Generics
 
-type BStr = [Word8]
-type HashF = [Word8] -> [Word8]
---type BStr = String
---type HashF = String -> String
+--type BStr = [Word8]
+--type HashF = [Word8] -> [Word8]
+type BStr = String
+type HashF = String -> String
 
 
-toWord8 :: String -> [Word8]
-toWord8 = CodStr.encode
---toWord8 :: String -> String
---toWord8 x = x
+--toWord8 :: String -> [Word8]
+--toWord8 = CodStr.encode
+toWord8 :: String -> String
+toWord8 x = x
 
 class GHashable f where 
     gcomputeHash :: HashF -> f a -> BStr
@@ -64,3 +66,10 @@ class Hashable a where
     computeHash :: HashF -> a -> BStr
     default computeHash :: (Generic a, GHashable (Rep a)) => HashF -> a -> BStr
     computeHash hashf x = gcomputeHash hashf (from x) 
+
+data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Generic, Show)
+
+instance (Hashable a, Show a) => Hashable (Tree a) 
+instance Hashable Int 
+
+main = print $ show $ computeHash Prelude.id (Node 5 EmptyTree EmptyTree :: Tree Int)

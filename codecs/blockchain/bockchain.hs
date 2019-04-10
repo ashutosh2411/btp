@@ -19,6 +19,9 @@ data Block = Block { index    :: Int           -- Index of the block
                    , nonce    :: Maybe Int     -- Nonce of the block (proof of work)
                    } deriving (Generic, Show, Hashable)
 
+instance Hashable Transaction 
+instance Hashable Float   
+
 genesisBlock :: Block
 genesisBlock = Block blockIndex blockTxs blockHash prevHash Nothing
     where blockIndex = 0

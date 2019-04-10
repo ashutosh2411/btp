@@ -7,9 +7,9 @@
 
 import GHC.Generics
 
-data Tree a = EmptyTree 
-    | Node a (Tree a) (Tree a) 
-    deriving (Generic, Show)
+data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Generic, Show)
+
+instance Hashable Int
 
 instance (Hashable a, Show a) => Hashable (Tree a)  
 
@@ -18,8 +18,7 @@ data HShape =
     |Concat [HShape]
     |Interleaving [HShape]
     |Slice Int Int
-    |Pad String 
-    deriving Show
+    |Pad String deriving Show
 
 class Hashable a where
     toHShape :: a -> HShape
@@ -48,6 +47,6 @@ instance (Show a) => GHashable (K1 i a) where
 -- instance GHashable (Tree) where
 --     gtoHShape ta = gtoHShape (from ta)
 
-a = M1 {unM1 = R1 (M1 {unM1 = M1 {unM1 = K1 {unK1 = 5}} :*: (M1 {unM1 = K1 {unK1 = EmptyTree}} :*: M1 {unM1 = K1 {unK1 = EmptyTree}})})}
+-- a = M1 {unM1 = R1 (M1 {unM1 = M1 {unM1 = K1 {unK1 = 5}} :*: (M1 {unM1 = K1 {unK1 = EmptyTree}} :*: M1 {unM1 = K1 {unK1 = EmptyTree}})})}
 
-main = print $ show $ from (Node 5 EmptyTree EmptyTree)
+main = print $ show $ toHShape (Node 5 EmptyTree EmptyTree :: Tree Int)
