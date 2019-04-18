@@ -35,6 +35,7 @@ Department of Computer Science and Engineering
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Indian Institute of Technology, Palakkad
 -->
+
 \newpage
 
 # Acknowledgments
@@ -88,13 +89,13 @@ Also, the process of hashing data types is fairly mechanical, and thus it could 
 
 ## 2.1. Introduction
 
-In computer programming, especially functional programming, and type theory,
-an algebraic data type is a kind of composite type, i.e., a type formed by
+In functional programming, and type theory,
+an algebraic data type is a type of composite type, i.e., a type formed by
 combining other types.
 
 Algebraic data types in Haskell have one or more constructors. Each data
-constructor can have zero or more arguments. The definitions can be recursive
-too.
+constructor can have zero or more arguments. The definitions of the datatypes
+can be recursive too.
 
 We can define functions on algebraic data types using pattern matching.
 Pattern matching is essentially
@@ -160,13 +161,8 @@ A `List` of type `a` is an ordered collection of elements of type `a`. In Haskel
 
 # 3. Hashing 
 
-A hash function is any function that can be used to map data of arbitrary size
-to data of a fixed size. The values returned by a hash function are called hash
-values, hash codes, digests, or simply hashes. Hash functions are often used
-in combination with a hash table, a common data structure used in computer
-software for rapid data lookup. Hash functions accelerate table or database
-lookup by detecting duplicated records in a large file. One such application is
-finding similar stretches in DNA sequences. They are also useful in cryptography.
+A cryptographic hash function is a hash function which takes an input (or 'message') and returns a fixed-size string of bytes. The string is called the 'hash value', 'message digest', 'digital fingerprint', 'digest' or 'checksum'. 
+
 A cryptographic hash function allows one to easily verify that some input data
 maps to a given hash value, but if the input data is unknown, it is deliberately
 difficult to reconstruct it (or any equivalent alternatives) by knowing the stored
@@ -178,9 +174,13 @@ building block for HMACs, which provide message authentication.
 
 Figure 1 represents a method used to create Hashes of input strings. The method
 is called Merkle Dangard construction. 
-In cryptography, the Merkle–Damgård construction or Merkle–Damgård hash function is a method of building collision-resistant cryptographic hash functions from collision-resistant one-way compression functions. This construction was used in the design of many popular hash algorithms such as MD5, SHA1, and SHA2.
+Using the the Merkle-Damgard construction we can build collision-resistant cryptographic hash functions using collision-resistant one-way compression functions. This construction has been used in the design of many popular hash algorithms such as MD5, SHA1, and SHA2.
 
-The Merkle–Damgård hash function first applies an MD-compliant padding function to create an input whose size is a multiple of a fixed number (e.g. 512 or 1024) — this is because compression functions cannot handle inputs of arbitrary size. The hash function then breaks the result into blocks of fixed size and processes them one at a time with the compression function, each time combining a block of the input with the output of the previous round. In order to make the construction secure, Merkle and Damgård proposed that messages be padded with a padding that encodes the length of the original message. This is called length padding or Merkle–Damgård strengthening. 
+First, the Merkle-Damgard hash function applies an MD-compliant padding function (which adds a padding to the original input) to create the input whose size is a multiple of a fixed number, because the compression function cannot handle inputs of arbitrary size. 
+
+Then, the hash function breaks down the result into blocks of fixed size and process them one by one with the compression function. Every time it combines the input block with the output of the previous round. 
+
+In order to ensure security of the construction, Merkle and Damgard proposed that messages should be padded with a padding that encodes the original messages' length. This is called length padding, or Merkle-Damgard strengthening.
 
 In the diagram, the one-way compression function is denoted by the block labeled 
 `Compression Function`, and transforms two fixed length inputs to an output of the 
@@ -195,7 +195,7 @@ appended.
 
 ## 3.2. Tree Hashing
 
-Tree Hashing Deals with Hash Functions whose data flow from the leaves to the root of a graph-theoretical tree. A very popular tree hashing method has been proposed by Merkle and Damgard in 1989. It has been an optional or integral part of several SHA-3 candidates (MD6, SANDstorm, Skein). It has also been theoretically studied by the Keccak team and they came up with a general tree hashing standard, which is yet to be approved by the NSA.  
+Tree Hashing deals with Hash Functions in which the data flows from the leaves to the root of a tree. A tree hashing method has been proposed by Merkle and Damgard in 1989. It has been an optional or integral part of several SHA-3 candidates (MD6, SANDstorm, Skein). It has also been theoretically studied by the Keccak team and they came up with a general tree hashing standard, which is yet to be approved by the NSA.  
 
 Tree hashing protocols unlock parallelism leading to faster hash computations. Apart from that, hash recomputations in case of small message changes is also enabled. Verification of hash could be done without reading all message blocks, using Merkle/Lamport signatures. 
 
@@ -370,13 +370,12 @@ from tree: [97,73,98,73,99,73,100,73,101,73,102,73,103,73,104,82]
 # 4. Generic Programming
 
 ## 4.1. Introduction
-Generic programming is a style of computer programming in which algorithms are 
-written in terms of types to-be-specified-later that are then instantiated when 
-needed for specific types provided as parameters. This approach, pioneered by ML 
-in 1973, permits writing common functions or types that differ only in the 
+Generic programming is a style of computer programming in which programs are 
+written in terms of types (that will be specified later) that are then instantiated when 
+needed for specific types which are provided as parameters. This approach, first seen in ML 
+in 1973, allowes writing common functions or types that are different only in the 
 set of types on which they operate when used, thus reducing duplication. Such 
-software entities are known as generics in Python, Ada, C#, Delphi, Eiffel, F#, 
-Java, Rust, Swift, TypeScript and Visual Basic .NET. 
+software entities are known as generics in various programming languages. 
 
 Generic programming is a powerful way to define a function that works in an 
 analogous way for a class of types. Most of the programming languages have some 
@@ -414,7 +413,7 @@ Example of Generic Programming in C++.
 ## 4.2. Generic Programming in Haskell
 
 ### 4.2.1. Parametric Polymorphism
-In programming languages and type theory, parametric polymorphism is a way to make a 
+Parametric polymorphism is a way  of abstraction and allows one to make a 
 language more expressive, while still maintaining full static type-safety. Using 
 parametric polymorphism, a function or a data type can be written generically so 
 that it can handle values identically without depending on their type.
@@ -431,7 +430,7 @@ For example,
 This is similar to generic programming in Java and C#. Parametric polymorphism is native to Haskell and so we don't call it generic programming. 
 
 ### 4.2.2. Ad-hoc Polymorphism
-Ad-hoc polymorphism refers to when a value is able to adopt any one of several types because it, or a value it uses, has been given a separate definition for each of those types. For example, the + operator essentially does something entirely different when applied to floating-point values as compared to when applied to integers – in Python it can even be applied to strings as well. Most languages support at least some ad-hoc polymorphism, but in languages like C it is restricted to only built-in functions and types. Other languages like C++ allow programmers to provide their own overloading, supplying multiple definitions of a single function, to be disambiguated by the types of the arguments. In Haskell, this is achieved via the system of type classes and class instances.
+In ad-hoc polymorphism, a value is able to adopt any one of several types because it, because it has been given a separate definition for each of those types. For example, the `+` operator essentially does something entirely different when applied to floating-point values as compared to when applied to integers – in Python it can even be applied to strings as well. Most languages support at least some ad-hoc polymorphism, but in languages like C it is restricted to only built-in functions and types. Other languages like C++ allow programmers to provide their own overloading, supplying multiple definitions of a single function, to be disambiguated by the types of the arguments. 
 
 In Haskell, this is achieved via the system of type classes and class instances.
 
@@ -592,7 +591,8 @@ The representation has a fairly predictable pattern. The above functions are sor
 
 ### 4.4.2. Polymorphic Recursion
 
-Polymorphic functions are functions with a common scheme that reference each other and allow types to change in the calls. Polymorphic recursion can be encoded in several ways. One of the ways is using the type classes. The class declaration specifies the type signature for the class. Standard classes already use polymorphic recursion for deriving instances. 
+Polymorphic functions have a common scheme that references each other and allows types to change in the calls. 
+Polymorphic recursion can be encoded in several ways. One of the ways is using the type classes. The class declaration specifies the type signature for the class. Standard classes already use polymorphic recursion for deriving instances. 
 
 Thus, we can define a class `Show` as follows. 
 ```haskell
@@ -823,9 +823,10 @@ Now, the instance Hashable can be defined without specifically defining the comp
 # 6. Applications 
 
 ## 6.1. Blockchain
-A blockchain, originally block chain, is a growing list of records, called blocks, which are linked using cryptography. Each block contains a cryptographic hash of the previous block, a timestamp, and transaction data (generally represented as a Merkle tree). 
+A blockchain, can be thought of as a growing list of records, called blocks, which are linked using cryptography. Each block contains a cryptographic hash of the previous block, a timestamp, and transaction data. 
 
-By design, a blockchain is resistant to modification of the data. It is "an open, distributed ledger that can record transactions between two parties efficiently and in a verifiable and permanent way". For use as a distributed ledger, a blockchain is typically managed by a peer-to-peer network collectively adhering to a protocol for inter-node communication and validating new blocks. Once recorded, the data in any given block cannot be altered retroactively without alteration of all subsequent blocks, which requires consensus of the network majority. Although blockchain records are not unalterable, blockchains may be considered secure by design and exemplify a distributed computing system with high Byzantine fault tolerance. Decentralized consensus has therefore been claimed with a blockchain.
+By the virtue of it's design, a blockchain is resistant to modification of the data. It is "an open, distributed ledger that can record transactions between two parties efficiently and in a verifiable and permanent way". 
+A blockchain is managed by a peer-to-peer network collectively following a protocol for inter-node communication and validation of new blocks. Once recorded, the data in any given block cannot be altered without alteration of all subsequent blocks, which requires consensus of the network majority. Although blockchain records are not unalterable, blockchains may be considered secure by design and exemplify a distributed computing system with high Byzantine fault tolerance. Decentralized consensus has therefore been claimed with a blockchain. 
 
 ## 6.2. Blockchain without DThash.
 Let's explore the data structures required to build a blockchain in Haskell. Let's first define a `Transaction`. A transaction should have the ID of the payee, the ID of the receiver and the amount that has been transfered. 
@@ -904,10 +905,12 @@ implementation by first converting the datatype to its string representation, an
 
 1. **Sakura: a flexible coding for tree hashing** by *Guido Bertoni, Joan Daemen, Michael Peeters, and Gilles Van Assche*.
 
-2. **GHC Generics Explained** by *Mark Karpov*.
+2. **Bitcoin: A Peer-to-Peer Election Cash System** by *Satoshi Nakamoto*.
 
-3. **Aeson: the tutorial** by *Artyom Kazak*.
+3. **GHC Generics Explained** by *Mark Karpov*.
 
-4. **Rolling your Own Blockchain in Haskell** by *Michael Burge*.
+4. **Aeson: the tutorial** by *Artyom Kazak*.
 
-5. **Advantages of Functional Programming for Blockchain Protocols** by *aeternity*.
+5. **Rolling your Own Blockchain in Haskell** by *Michael Burge*.
+
+6. **Advantages of Functional Programming for Blockchain Protocols** by *aeternity*.
